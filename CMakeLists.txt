@@ -7,7 +7,8 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(FreeKill VERSION 0.5.4)
-add_definitions(-DFK_VERSION=\"${CMAKE_PROJECT_VERSION}\")
+set(FK_VERSION "${CMAKE_PROJECT_VERSION}.post1+com.github.yuantailing.FreeKill")
+add_definitions(-DFK_VERSION=\"${FK_VERSION}\")
 
 find_package(Qt6 REQUIRED COMPONENTS
   Network
@@ -67,7 +68,7 @@ add_custom_command(
   TARGET FreeKill
   POST_BUILD
   COMMENT "Generating version file fk_ver"
-  COMMAND echo ${CMAKE_PROJECT_VERSION} > ${PROJECT_SOURCE_DIR}/fk_ver
+  COMMAND echo ${FK_VERSION} > ${PROJECT_SOURCE_DIR}/fk_ver
   COMMAND ${PROJECT_SOURCE_DIR}/genfkver.sh
 )
 

@@ -85,7 +85,7 @@ jobs:
         cd assets/res
         cp -r /etc/ssl/certs .
         cp /usr/share/ca-certificates/mozilla/* certs/
-        curl https://raw.githubusercontent.com/Qsgs-Fans/freekill-server-list/master/server-list.json > server-list.json
+        echo -n '[{"addr": "sgs.tsing.pub", "port": 9527, "name": "研讨"}]' > server-list.json
         cd ../..
         echo ${FKVER%)} > ../fk_ver
         ../genfkver.sh
@@ -105,7 +105,7 @@ jobs:
       run: make -j2
 
     - name: Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: apk
         path: build/android-build/build/outputs/apk/release/android-build-release-unsigned.apk
@@ -127,7 +127,7 @@ jobs:
         fallback: 0.0.1
 
     - name: Download APK from build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: apk
         path: apk
@@ -150,7 +150,14 @@ jobs:
         mv ${{ steps.sign_app.outputs.signedReleaseFile }} \
           apk/FreeKill-${{ steps.previoustag.outputs.tag }}.apk
 
+    - name: Upload Signed APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: apk-signed
+        path: apk/FreeKill-${{ steps.previoustag.outputs.tag }}.apk
+
     - name: Upload Release APK
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
         token: ${{ secrets.MY_TOKEN }}

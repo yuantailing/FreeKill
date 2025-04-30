@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- SPDX-License-Identifier: GPL-3.0-or-later !-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.notify.FreeKill"
+  package="com.github.yuantailing.FreeKill"
   android:installLocation="preferExternal"
   android:versionCode="504"
   android:versionName="0.5.4">
