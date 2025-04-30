@@ -186,23 +186,30 @@ void PackMan::updatePack(const QString &pack) {
     return;
 }
 
-void PackMan::upgradePack(const QString &pack) {
-  int error;
-  error = checkout_branch(pack, "master");
-  if (error < 0)
-    return;
-  error = status(pack);
-  if (error != 0) {
+void PackMan::upgradePack(const QString &pack, const QString &revision) {
+  if (revision.isEmpty()) {
+    int error;
+    error = checkout_branch(pack, "master");
+    if (error < 0)
+      return;
+    error = status(pack);
+    if (error != 0) {
 #ifndef FK_SERVER_ONLY
-    if (Backend != nullptr) {
-      Backend->showDialog("critical", tr("packages/%1: some error occured.").arg(pack));
-    }
+      if (Backend != nullptr) {
+        Backend->showDialog("critical", tr("packages/%1: some error occured.").arg(pack));
+      }
 #endif
-    return;
+      return;
+    }
+    error = pull(pack);
+    if (error < 0)
+      return;
+  } else {
+    int error;
+    error = checkout(pack, revision);
+    if (error < 0)
+      return;
   }
-  error = pull(pack);
-  if (error < 0)
-    return;
   db->exec(QString("UPDATE packages SET hash = '%1' WHERE name = '%2';")
                   .arg(head(pack))
                   .arg(pack));

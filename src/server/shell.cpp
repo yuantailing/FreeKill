@@ -160,7 +160,12 @@ void Shell::upgradeCommand(QStringList &list) {
   }
 
   auto pack = list[0];
-  Pacman->upgradePack(pack);
+  if (list.size() == 1) {
+    Pacman->upgradePack(pack);
+  } else {
+    auto revision = list[1];
+    Pacman->upgradePack(pack, revision);
+  }
   ServerInstance->refreshMd5();
 }
 

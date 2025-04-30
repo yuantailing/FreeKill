@@ -20,7 +20,7 @@ public:
   Q_INVOKABLE void enablePack(const QString &pack);
   Q_INVOKABLE void disablePack(const QString &pack);
   Q_INVOKABLE void updatePack(const QString &pack);
-  Q_INVOKABLE void upgradePack(const QString &pack);
+  Q_INVOKABLE void upgradePack(const QString &pack, const QString &revision = "");
   Q_INVOKABLE void removePack(const QString &pack);
   Q_INVOKABLE QString listPackages();
 
