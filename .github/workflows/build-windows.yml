@@ -85,7 +85,7 @@ jobs:
         7z a -t7z FreeKill-release.7z FreeKill-release -r -mx=9 -m0=LZMA2 -ms=10m -mf=on -mhc=on -mmt=on
 
     - name: Upload Release
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: zip
         path: FreeKill-release.7z
@@ -94,6 +94,7 @@ jobs:
     name: Release
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:
     - name: Checkout Git Repo
       uses: actions/checkout@v3
@@ -107,7 +108,7 @@ jobs:
         fallback: 0.0.1
 
     - name: Download zip from build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: zip
         path: zip
